@@ -1,8 +1,9 @@
 name: Release CLI binaries
 
 on:
-  # TODO: run only on real releases
   push:
+    tags:
+      - "*.*.*.Final"
 
 jobs:
   build-native-binary:
@@ -68,8 +69,6 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          # TODO: remove this one to use tag
-          tag_name: 0.0.1-SNAPSHOT
           files: |
             apicurio-codegen-macos
             apicurio-codegen-linux
