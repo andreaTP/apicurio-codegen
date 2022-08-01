@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: code-with-quarkus-${{ matrix.os }}
-          path: ./cli/target/apicurio-codegen-cli-*-runner-*
+          path: ./cli/target/apicurio-codegen-cli-*-runner*
           if-no-files-found: error
 
   release-native-binaries:
