@@ -60,6 +60,17 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
-
-      - name: Display structure of downloaded files
-        run: ls -R
+      - name: Prepare files to release
+        run: |
+          mv ./code-with-quarkus-macos-latest/apicurio-codegen-cli-1.0.9-SNAPSHOT-runner apicurio-codegen-macos
+          mv ./code-with-quarkus-ubuntu-latest/apicurio-codegen-cli-1.0.9-SNAPSHOT-runner apicurio-codegen-linux
+          mv ./code-with-quarkus-windows-latest/apicurio-codegen-cli-1.0.9-SNAPSHOT-runner.exe apicurio-codegen-win.exe
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          # TODO: remove this one to use tag
+          input_tag_name: 0.0.1-SNAPSHOT
+          files: |
+            apicurio-codegen-macos
+            apicurio-codegen-linux
+            apicurio-codegen-win.exe
