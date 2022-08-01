@@ -69,7 +69,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           # TODO: remove this one to use tag
-          input_tag_name: 0.0.1-SNAPSHOT
+          tag_name: 0.0.1-SNAPSHOT
           files: |
             apicurio-codegen-macos
             apicurio-codegen-linux
