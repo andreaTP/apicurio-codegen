@@ -1,0 +1,64 @@
+name: Release CLI binaries
+
+on:
+  # TODO: run only on real releases
+  push:
+
+jobs:
+  build-native-binary:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        gu-binary: [gu, gu.cmd]
+        exclude:
+          - os: ubuntu-latest
+            gu-binary: gu.cmd
+          - os: macos-latest
+            gu-binary: gu.cmd
+          - os: windows-latest
+            gu-binary: gu
+    continue-on-error: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.1.0'
+          java-version: '11'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install native-image component
+        run: |
+          ${{ matrix.gu-binary }} install native-image
+
+      - name: 'Set up Visual C Build Tools Workload for Visual Studio 2019 Build Tools'
+        if: runner.os == 'Windows'
+        run: |
+          choco upgrade -y visualstudio2019-workload-vctools
+      - name: 'Build Native Image'
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+
+      - name: Compile to native binaries
+        run: mvn package -Pnative
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-with-quarkus-${{ matrix.os }}
+          path: ./cli/target/apicurio-codegen-cli-*-runner-*
+          if-no-files-found: error
+
+  release-native-binaries:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+
+      - name: Display structure of downloaded files
+        run: ls -R

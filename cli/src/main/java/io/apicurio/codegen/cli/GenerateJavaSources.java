@@ -17,7 +17,8 @@
 package io.apicurio.codegen.cli;
 
 import io.apicurio.hub.api.codegen.OpenApi2JaxRs;
-import io.quarkus.runtime.annotations.RegisterForReflection;
+import io.apicurio.hub.api.codegen.OpenApi2Quarkus;
+import io.apicurio.hub.api.codegen.OpenApi2Thorntail;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -29,8 +30,6 @@ import java.io.IOException;
 import java.net.URL;
 
 @Command(name = "apicurio-codegen", mixinStandardHelpOptions = true, helpCommand = true)
-// TODO: remove if un-necessary
-@RegisterForReflection(targets = {})
 public class GenerateJavaSources implements Runnable {
 
     @Option(names = { "-s", "--spec" }, description = "The specification to be used", required = true)
@@ -39,18 +38,55 @@ public class GenerateJavaSources implements Runnable {
     @Option(names = { "-o", "--output" }, description = "The ZIP archive to be generated", required = true)
     File out = null;
 
+    @Option(names = { "--code-only" }, description = "Generates only the code and do not scaffold the entire project")
+    boolean codeOnly = true;
+
+    @Option(names = { "--reactive" }, description = "Generate the reactive version")
+    boolean reactive = false;
+
+    @Option(names = { "--artifact-id" }, description = "The generated artifact id")
+    String artifactId = "generated-api";
+
+    @Option(names = { "--group-id" }, description = "The generated group id")
+    String groupId = "org.example.api";
+
+    @Option(names = { "--java-package" }, description = "The target java package")
+    String javaPackage = "org.example.api";
+
+    enum Generator {
+        JAX_RS,
+        QUARKUS,
+        THORNTAIL
+    }
+
+    @Option(names = { "--generator" }, description = "The generator to be used")
+    Generator generatorType = Generator.JAX_RS;
+
     @Override
     public void run() {
 
         OpenApi2JaxRs.JaxRsProjectSettings settings = new OpenApi2JaxRs.JaxRsProjectSettings();
-        settings.codeOnly = false;
-        settings.reactive = false;
-        settings.artifactId = "generated-api";
-        settings.groupId = "org.example.api";
-        settings.javaPackage = "org.example.api";
+        settings.codeOnly = codeOnly;
+        settings.reactive = reactive;
+        settings.artifactId = artifactId;
+        settings.groupId = groupId;
+        settings.javaPackage = javaPackage;
 
-        OpenApi2JaxRs generator = new OpenApi2JaxRs();
+        // TODO: should it be configurable?
+        OpenApi2JaxRs generator = null;
+        switch (generatorType) {
+            case JAX_RS:
+                generator = new OpenApi2JaxRs();
+                break;
+            case QUARKUS:
+                generator = new OpenApi2Quarkus();
+                break;
+            case THORNTAIL:
+                generator = new OpenApi2Thorntail();
+                break;
+        }
         generator.setSettings(settings);
+        // TODO: check if this should be configurable
         generator.setUpdateOnly(false);
         try {
             generator.setOpenApiDocument(spec);
@@ -58,7 +94,6 @@ public class GenerateJavaSources implements Runnable {
             ByteArrayOutputStream outputStream = generator.generate();
 
             FileUtils.writeByteArrayToFile(out, outputStream.toByteArray());
-            System.out.println("Generated ZIP can be found here: " + out.getAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
