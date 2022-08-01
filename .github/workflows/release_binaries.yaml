@@ -54,6 +54,7 @@ jobs:
           if-no-files-found: error
 
   release-native-binaries:
+    needs: build-native-binaries
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
