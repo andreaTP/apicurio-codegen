@@ -26,6 +26,7 @@ import picocli.CommandLine.Option;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 
@@ -33,7 +34,7 @@ import java.net.URL;
 public class GenerateJavaSources implements Runnable {
 
     @Option(names = { "-s", "--spec" }, description = "The specification to be used", required = true)
-    URL spec = null;
+    File spec = null;
 
     @Option(names = { "-o", "--output" }, description = "The ZIP archive to be generated", required = true)
     File out = null;
@@ -89,7 +90,7 @@ public class GenerateJavaSources implements Runnable {
         // TODO: check if this should be configurable
         generator.setUpdateOnly(false);
         try {
-            generator.setOpenApiDocument(spec);
+            generator.setOpenApiDocument(new FileInputStream(spec));
 
             ByteArrayOutputStream outputStream = generator.generate();
 
