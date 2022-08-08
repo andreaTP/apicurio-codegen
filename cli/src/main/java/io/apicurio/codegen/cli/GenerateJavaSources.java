@@ -19,6 +19,7 @@ package io.apicurio.codegen.cli;
 import io.apicurio.hub.api.codegen.OpenApi2JaxRs;
 import io.apicurio.hub.api.codegen.OpenApi2Quarkus;
 import io.apicurio.hub.api.codegen.OpenApi2Thorntail;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -31,16 +32,29 @@ import java.io.IOException;
 import java.net.URL;
 
 @Command(name = "apicurio-codegen", mixinStandardHelpOptions = true, helpCommand = true)
+@RegisterForReflection(targets = {
+        io.apicurio.datamodels.compat.JsonCompat.class,
+        io.apicurio.datamodels.compat.ValidationCompat.class,
+        io.apicurio.datamodels.compat.NodeCompat.class,
+        io.apicurio.hub.api.codegen.pre.DocumentPreProcessor.class,
+        // After debugging
+        io.apicurio.datamodels.openapi.v3.models.Oas30Document.class,
+        io.apicurio.datamodels.openapi.v3.models.Oas30Components.class,
+        io.apicurio.datamodels.openapi.v3.models.Oas30SchemaDefinition.class
+})
 public class GenerateJavaSources implements Runnable {
 
     @Option(names = { "-s", "--spec" }, description = "The specification to be used", required = true)
-    File spec = null;
+    File spec = new File("/Users/aperuffo/workspace/apicurio-registry/common/src/main/resources/META-INF/openapi.json");
 
     @Option(names = { "-o", "--output" }, description = "The ZIP archive to be generated", required = true)
-    File out = null;
+    File out = new File("/tmp");
 
     @Option(names = { "--code-only" }, description = "Generates only the code and do not scaffold the entire project")
-    boolean codeOnly = true;
+    boolean codeOnly = false;
+
+    @Option(names = { "--update-only" }, description = "Generates only updated files")
+    boolean updateOnly = false;
 
     @Option(names = { "--reactive" }, description = "Generate the reactive version")
     boolean reactive = false;
@@ -61,11 +75,12 @@ public class GenerateJavaSources implements Runnable {
     }
 
     @Option(names = { "--generator" }, description = "The generator to be used")
-    Generator generatorType = Generator.JAX_RS;
+    Generator generatorType = Generator.QUARKUS;
 
     @Override
     public void run() {
 
+        System.out.println("This is the actual run ... maybe from here ... ");
         OpenApi2JaxRs.JaxRsProjectSettings settings = new OpenApi2JaxRs.JaxRsProjectSettings();
         settings.codeOnly = codeOnly;
         settings.reactive = reactive;
@@ -73,7 +88,6 @@ public class GenerateJavaSources implements Runnable {
         settings.groupId = groupId;
         settings.javaPackage = javaPackage;
 
-        // TODO: should it be configurable?
         OpenApi2JaxRs generator = null;
         switch (generatorType) {
             case JAX_RS:
@@ -87,8 +101,7 @@ public class GenerateJavaSources implements Runnable {
                 break;
         }
         generator.setSettings(settings);
-        // TODO: check if this should be configurable
-        generator.setUpdateOnly(false);
+        generator.setUpdateOnly(updateOnly);
         try {
             generator.setOpenApiDocument(new FileInputStream(spec));
 
@@ -101,6 +114,14 @@ public class GenerateJavaSources implements Runnable {
     }
 
     public static void main(String[] args) {
+        System.out.println("DA QUI!");
+        args = new String[]
+                {"--spec=/Users/aperuffo/workspace/apicurio-registry/common/src/main/resources/META-INF/openapi.json",
+                        "--output=/tmp/test.zip",
+                        "--generator=JAX_RS",
+                        "--code-only=false",
+                        "--update-only=false"};
+
         int exitCode = new CommandLine(new GenerateJavaSources()).execute(args);
         System.exit(exitCode);
     }

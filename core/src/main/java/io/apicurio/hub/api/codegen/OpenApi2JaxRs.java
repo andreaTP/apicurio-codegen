@@ -186,10 +186,12 @@ public class OpenApi2JaxRs {
      * @throws IOException
      */
     public final void generate(OutputStream output) throws IOException {
+        System.out.println("Final generate method");
         StringBuilder log = new StringBuilder();
 
         try (ZipOutputStream zos = new ZipOutputStream(output)) {
             try {
+                System.out.println("Going to getInfo");
                 CodegenInfo info = getInfoFromApiDoc();
                 generateAll(info, log, zos);
             } catch (Exception e) {
@@ -309,6 +311,7 @@ public class OpenApi2JaxRs {
      * needed to generate appropriate Java class(es).
      */
     protected CodegenInfo getInfoFromApiDoc() throws IOException {
+        System.out.println("getInfoFromApiDoc");
         document = Library.readDocumentFromJSONString(openApiDoc);
 
         // Pre-process the document
@@ -362,7 +365,9 @@ public class OpenApi2JaxRs {
      * @param document
      */
     private Document preProcess(Document document) {
+        System.out.println("---- preProcess ----");
         DocumentPreProcessor preprocessor = new DocumentPreProcessor();
+        System.out.println("---- preProcess ---- " + DocumentPreProcessor.processors.length);
         preprocessor.process(document);
 
         if (Boolean.FALSE) {

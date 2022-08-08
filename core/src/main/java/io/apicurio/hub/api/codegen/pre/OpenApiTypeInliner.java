@@ -18,8 +18,11 @@ package io.apicurio.hub.api.codegen.pre;
 
 import io.apicurio.datamodels.Library;
 import io.apicurio.datamodels.combined.visitors.CombinedVisitorAdapter;
+import io.apicurio.datamodels.compat.NodeCompat;
+import io.apicurio.datamodels.compat.RegexCompat;
 import io.apicurio.datamodels.core.models.ExtensibleNode;
 import io.apicurio.datamodels.core.models.Extension;
+import io.apicurio.datamodels.core.models.IIndexedNode;
 import io.apicurio.datamodels.core.models.Node;
 import io.apicurio.datamodels.core.models.common.IDefinition;
 import io.apicurio.datamodels.core.models.common.IPropertySchema;
@@ -32,6 +35,8 @@ import io.apicurio.datamodels.openapi.v3.models.Oas30Schema.Oas30NotSchema;
 import io.apicurio.datamodels.openapi.v3.models.Oas30Schema.Oas30OneOfSchema;
 import io.apicurio.hub.api.codegen.CodegenExtensions;
 
+import java.util.List;
+
 /**
  * @author eric.wittmann@gmail.com
  */
@@ -42,14 +47,17 @@ public class OpenApiTypeInliner extends CombinedVisitorAdapter {
      */
     @Override
     public void visitSchema(Schema node) {
+        System.out.println("visiting node " + node.$ref + " - " );
         OasSchema schema = (OasSchema) node;
 
         LocalReferenceResolver resolver = new LocalReferenceResolver();
         if (node.$ref != null) {
-            Node referencedSchemaDefNode = resolver.resolveRef(node.$ref, node);
+            Node referencedSchemaDefNode = resolveRef(node.$ref, node);
+            System.out.println("REF: " + referencedSchemaDefNode);
             if (referencedSchemaDefNode != null) {
                 OasSchema referencedSchema = (OasSchema) referencedSchemaDefNode;
                 if (isSimpleType(referencedSchema)) {
+                    System.out.println("---> " + referencedSchema);
                     inlineSchema((Oas30Schema) node, referencedSchema);
                     markForRemoval(referencedSchema);
                 } else if (isInlineSchema((ExtensibleNode) referencedSchemaDefNode)) {
@@ -57,6 +65,42 @@ public class OpenApiTypeInliner extends CombinedVisitorAdapter {
                     markForRemoval((ExtensibleNode) referencedSchemaDefNode);
                 }
             }
+        }
+    }
+
+    // DEBUGGO
+    @SuppressWarnings("rawtypes")
+    public Node resolveRef(String $ref, Node from) {
+        // Only handle internal $refs
+        if ($ref == null || $ref.indexOf("#/") != 0) {
+            System.out.println("early: " + $ref.indexOf("#/"));
+            return null;
+        }
+
+        // TODO support escaped chars in JSON refs
+        // TODO implement a proper reference resolver including external file resolution: https://github.com/EricWittmann/oai-ts-core/issues/8
+        List<String[]> split = RegexCompat.findMatches($ref, "([^/]+)/?");
+        Object cnode = null;
+        for (String[] mi : split) {
+            String seg = mi[1];
+            if (NodeCompat.equals(seg, "#")) {
+                cnode = from.ownerDocument();
+                System.out.println("cnode: " + cnode + " - class: " + cnode.getClass());
+            } else if (cnode != null) {
+                if (cnode instanceof IIndexedNode) {
+                    cnode = ((IIndexedNode) cnode).getItem(seg);
+                    System.out.println("cnode - IIndexedNode : " + cnode + " - class: " + cnode.getClass());
+                } else {
+                    cnode = NodeCompat.getProperty(cnode, seg);
+                    System.out.println("cnode - property : " + cnode + " - class: " + cnode.getClass());
+                }
+            }
+        }
+
+        if (cnode instanceof Node) {
+            return (Node) cnode;
+        } else {
+            return null;
         }
     }
 
@@ -129,6 +173,7 @@ public class OpenApiTypeInliner extends CombinedVisitorAdapter {
      * @param schemaDef
      */
     private boolean isSimpleType(OasSchema schemaDef) {
+        System.out.println("Schema def " + schemaDef.toString());
         if ("string".equals(schemaDef.type)) {
             return schemaDef.enum_ == null;
         } else {

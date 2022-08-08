@@ -28,7 +28,7 @@ import io.apicurio.datamodels.core.visitors.TraverserDirection;
  */
 public class DocumentPreProcessor {
 
-    private static IVisitor [] processors = {
+    public static IVisitor [] processors = {
             new OpenApiLongSimpleTypeProcessor(),
             new OpenApiDateTimeSimpleTypeProcessor(),
             new OpenApiMapDataTypeProcessor(),
@@ -46,7 +46,10 @@ public class DocumentPreProcessor {
      * @param document
      */
     public void process(Document document) {
+        System.out.println("Going to pre-process " + processors.length);
+        Library.visitTree(document, new OpenApiTypeInliner(), TraverserDirection.down);
         for (IVisitor proc : processors) {
+            System.out.println("visiting Tree " + proc.getClass().getCanonicalName());
             Library.visitTree(document, proc, TraverserDirection.down);
         }
     }
