@@ -166,9 +166,9 @@ jobs:
       - uses: actions/download-artifact@v3
       - name: Prepare files to release
         run: |
-          mv ./apicurio-codegen-macos-latest/apicurio-codegen-cli-1.0.9-SNAPSHOT-runner apicurio-codegen-macos
-          mv ./apicurio-codegen-ubuntu-latest/apicurio-codegen-cli-1.0.9-SNAPSHOT-runner apicurio-codegen-linux
-          mv ./apicurio-codegen-windows-latest/apicurio-codegen-cli-1.0.9-SNAPSHOT-runner.exe apicurio-codegen-win.exe
+          mv ./apicurio-codegen-macos-latest/apicurio-codegen-cli-*-runner apicurio-codegen-macos
+          mv ./apicurio-codegen-ubuntu-latest/apicurio-codegen-cli-*-runner apicurio-codegen-linux
+          mv ./apicurio-codegen-windows-latest/apicurio-codegen-cli-*-runner.exe apicurio-codegen-win.exe
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
