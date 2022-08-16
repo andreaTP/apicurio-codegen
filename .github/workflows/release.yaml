@@ -16,7 +16,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'Apicurio'
+    # if: github.repository_owner == 'Apicurio'
     steps:
 
       - uses: actions/setup-java@v3
