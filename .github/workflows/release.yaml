@@ -18,6 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     # if: github.repository_owner == 'Apicurio'
     steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch}}
 
       - uses: actions/setup-java@v3
         with:
@@ -52,14 +56,14 @@ jobs:
           cat /home/runner/.m2/settings.xml
 
 
-      - name: Apicurio Codgen Code Checkout
+      - name: Configure Git
         run: |
           git init
           git config --global user.name "apicurio-ci"
           git config --global user.email "apicurio.ci@gmail.com"
-          git remote add origin "https://apicurio-ci:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
-          git fetch
-          git checkout ${{ github.event.inputs.branch}}
+          # git remote add origin "https://apicurio-ci:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git"
+          # git fetch
+          # git checkout ${{ github.event.inputs.branch}}
           git branch --set-upstream-to=origin/${{ github.event.inputs.branch}}
           git pull
           echo "#### Listing files after clone ####"
