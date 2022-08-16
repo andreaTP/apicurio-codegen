@@ -165,8 +165,8 @@ jobs:
           mv ./apicurio-codegen-windows-latest/apicurio-codegen-cli-1.0.9-SNAPSHOT-runner.exe apicurio-codegen-win.exe
       - name: Release
         uses: softprops/action-gh-release@v1
-        tag_name: ${{ github.event.inputs.release-version}}
         with:
+          tag_name: ${{ github.event.inputs.release-version}}
           files: |
             apicurio-codegen-macos
             apicurio-codegen-linux
