@@ -54,7 +54,6 @@ import org.jsonschema2pojo.Schema;
 import org.jsonschema2pojo.SchemaGenerator;
 import org.jsonschema2pojo.SchemaMapper;
 import org.jsonschema2pojo.SchemaStore;
-import org.jsonschema2pojo.rules.AdditionalPropertiesRule;
 import org.jsonschema2pojo.rules.Rule;
 import org.jsonschema2pojo.rules.RuleFactory;
 
