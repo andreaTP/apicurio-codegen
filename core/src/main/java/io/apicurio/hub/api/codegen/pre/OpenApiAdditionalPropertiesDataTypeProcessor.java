@@ -34,6 +34,7 @@ public class OpenApiAdditionalPropertiesDataTypeProcessor extends CombinedVisito
         if (schema.hasAdditionalPropertiesBoolean()) {
             schema.additionalProperties = Boolean.TRUE;
         } else if (schema.hasAdditionalPropertiesSchema()) {
+            // TODO properly support the typed schema
             schema.additionalProperties = Boolean.TRUE;
         } else {
             schema.additionalProperties = Boolean.FALSE;
