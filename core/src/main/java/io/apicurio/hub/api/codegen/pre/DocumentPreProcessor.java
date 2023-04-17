@@ -32,6 +32,7 @@ public class DocumentPreProcessor {
             new OpenApiLongSimpleTypeProcessor(),
             new OpenApiDateTimeSimpleTypeProcessor(),
             new OpenApiMapDataTypeProcessor(),
+            new OpenApiAdditionalPropertiesDataTypeProcessor(),
             new OpenApiTypeInliner(),
             new OpenApiInlinedSchemaRemover(),
             new OpenApiParameterInliner(),

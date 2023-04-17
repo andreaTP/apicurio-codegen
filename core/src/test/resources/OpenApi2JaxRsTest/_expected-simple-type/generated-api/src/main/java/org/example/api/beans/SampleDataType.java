@@ -21,7 +21,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "myint",
     "mydate",
     "mymap",
-    "id"
+    "id",
+    "mysimpleap",
+    "mystructuredap"
 })
 @Generated("jsonschema2pojo")
 public class SampleDataType {
@@ -43,6 +45,10 @@ public class SampleDataType {
     @JsonProperty("id")
     @JsonPropertyDescription("")
     private String id;
+    @JsonProperty("mysimpleap")
+    private MySimpleAdditionalProperties mysimpleap;
+    @JsonProperty("mystructuredap")
+    private MyStructuredAdditionalProperties mystructuredap;
 
     @JsonProperty("name")
     public String getName() {
@@ -108,6 +114,26 @@ public class SampleDataType {
     @JsonProperty("id")
     public void setId(String id) {
         this.id = id;
+    }
+
+    @JsonProperty("mysimpleap")
+    public MySimpleAdditionalProperties getMysimpleap() {
+        return mysimpleap;
+    }
+
+    @JsonProperty("mysimpleap")
+    public void setMysimpleap(MySimpleAdditionalProperties mysimpleap) {
+        this.mysimpleap = mysimpleap;
+    }
+
+    @JsonProperty("mystructuredap")
+    public MyStructuredAdditionalProperties getMystructuredap() {
+        return mystructuredap;
+    }
+
+    @JsonProperty("mystructuredap")
+    public void setMystructuredap(MyStructuredAdditionalProperties mystructuredap) {
+        this.mystructuredap = mystructuredap;
     }
 
 }
