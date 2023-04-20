@@ -8,7 +8,7 @@ First, add the following dependency to your application in order to have the cod
 
 ```xml
 <dependency>
-    <groupId>io.apicurio</groupId>
+    <groupId>com.github.andreaTP.apicurio-codegen</groupId>
     <artifactId>apicurio-codegen-quarkus-extension</artifactId>
 </dependency>
 ```

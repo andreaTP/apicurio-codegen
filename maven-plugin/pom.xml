@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.apicurio</groupId>
+        <groupId>com.github.andreaTP.apicurio-codegen</groupId>
         <artifactId>apicurio-codegen-parent</artifactId>
-        <version>1.0.15-SNAPSHOT</version>
+        <version>pp-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -22,7 +22,7 @@
     <dependencies>
         <!-- Apicurio Codegen -->
         <dependency>
-            <groupId>io.apicurio</groupId>
+            <groupId>com.github.andreaTP.apicurio-codegen</groupId>
             <artifactId>apicurio-codegen</artifactId>
             <version>${project.version}</version>
         </dependency>

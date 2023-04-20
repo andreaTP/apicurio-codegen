@@ -3,9 +3,9 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.apicurio</groupId>
+    <groupId>com.github.andreaTP.apicurio-codegen</groupId>
     <artifactId>apicurio-codegen-parent</artifactId>
-    <version>1.0.15-SNAPSHOT</version>
+    <version>pp-SNAPSHOT</version>
     <name>apicurio-codegen-parent</name>
     <packaging>pom</packaging>
 

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>apicurio-codegen-quarkus-extension-parent</artifactId>
-        <groupId>io.apicurio</groupId>
-        <version>1.0.15-SNAPSHOT</version>
+        <groupId>com.github.andreaTP.apicurio-codegen</groupId>
+        <version>pp-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -18,7 +18,7 @@
             <artifactId>quarkus-core-deployment</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.apicurio</groupId>
+            <groupId>com.github.andreaTP.apicurio-codegen</groupId>
             <artifactId>apicurio-codegen-quarkus-extension</artifactId>
         </dependency>
     </dependencies>

@@ -5,15 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.apicurio</groupId>
+        <groupId>com.github.andreaTP.apicurio-codegen</groupId>
         <artifactId>apicurio-codegen-parent</artifactId>
-        <version>1.0.15-SNAPSHOT</version>
+        <version>pp-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>apicurio-codegen-quarkus-extension-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.15-SNAPSHOT</version>
+    <version>pp-SNAPSHOT</version>
 
     <modules>
         <module>deployment</module>
@@ -48,7 +48,7 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>io.apicurio</groupId>
+                <groupId>com.github.andreaTP.apicurio-codegen</groupId>
                 <artifactId>apicurio-codegen-quarkus-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
