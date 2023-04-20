@@ -114,7 +114,7 @@ public class OpenApi2JaxRs {
 
         @Override
         public boolean isIncludeAdditionalProperties() {
-            return false;
+            return true;
         }
 
         @Override
