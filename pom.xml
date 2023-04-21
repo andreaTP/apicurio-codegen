@@ -5,7 +5,7 @@
 
     <groupId>com.github.andreaTP.apicurio-codegen</groupId>
     <artifactId>apicurio-codegen-parent</artifactId>
-    <version>pp-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>apicurio-codegen-parent</name>
     <packaging>pom</packaging>
 
