@@ -7,13 +7,13 @@
     <parent>
         <groupId>com.github.andreaTP.apicurio-codegen</groupId>
         <artifactId>apicurio-codegen-parent</artifactId>
-        <version>0.0.1</version>
+        <version>0.0.10</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>apicurio-codegen-quarkus-extension-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.10</version>
 
     <modules>
         <module>deployment</module>
